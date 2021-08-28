@@ -3,9 +3,24 @@ import ListItem from '../../components/ListItem'
 import Header from '../../components/Header'
 import SearchBar from '../../components/SearchBar'
 import Form from '../../components/Form'
-import Button from '../../components/Button'
-import { ThreeSixtyTwoTone } from '@material-ui/icons'
+//import Button from '../../components/Button'
+import { Button } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from "@material-ui/core/styles";
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
+
+const useStyles = makeStyles({
+    table: {
+        minWidth: 650,
+    },
+});
 
 
 function lerLista() {
@@ -55,6 +70,8 @@ class ListPage extends React.Component {
 
     }
 
+
+
     getList = (list) => {
         let lista = localStorage.getItem(list)
         if (!lista) {
@@ -85,12 +102,14 @@ class ListPage extends React.Component {
     }
 
     removerAluno = (event) => {
+        //console.log(event)
+        //console.log(event.target)
         let lista = this.getList("listaDeAlunos")
-        let id = event.target.id
+        let id = (event.target.parentNode.id || event.target.id)
         //console.log("remover id: ", id)
         let filtro = lista.filter((el) => el.id !== id)
         localStorage.setItem("listaDeAlunos", JSON.stringify(filtro))
-        //this.setState({ studentsList: filtro })
+        this.setState({ studentsList: filtro })
         this.studentsList = filtro
         //console.log(this.studentsList)
         this.forceUpdate()
@@ -104,12 +123,12 @@ class ListPage extends React.Component {
         //this.setState({ isEditing: true })
         this.isEditing = true
         let lista = this.getList("listaDeAlunos")
-        let id = event.target.id
+        let id = (event.target.parentNode.id || event.target.id)
         let filtro = lista.filter((el) => el.id === id)
         localStorage.setItem("editarAluno", JSON.stringify(filtro))
         //this.setState({ student: filtro[0] })
         //this.student = filtro[0]
-        this.setState({...filtro[0]})
+        this.setState({ ...filtro[0] })
 
         //apagando o aluno do local storage
         filtro = lista.filter((el) => el.id !== id)
@@ -143,80 +162,86 @@ class ListPage extends React.Component {
         this.forceUpdate()
     }
 
-    // handleChange = (event) => {
-    //     //console.log("list page handleChange event:", event)
-    //     const inputName = event.target.id
-    //     const inputValue = event.target.value
-    //     //console.log("list page handleChange event:", inputName, inputValue)
-    //     this.setState({ [inputName]: inputValue })
-    // }
 
     handleChange = (event) => {
-    
+
         const inputName = event.target.id
-    
+
         //numberMask
         if (inputName === "turma") {
-          let text = event.target.value
-          let numbers = text.replace(/\D/g, '')
-          const inputValue = numbers
-          event.target.value = numbers
-          this.setState({ [inputName]: inputValue })
+            let text = event.target.value
+            let numbers = text.replace(/\D/g, '')
+            const inputValue = numbers
+            event.target.value = numbers
+            this.setState({ [inputName]: inputValue })
         }
-    
+
         //phoneMask
         if ((inputName === "telemergencia") || (inputName === "telresponsavel")) {
-          let text = event.target.value
-          let numbers = text.replace(/\D/g, '')
-          let mask = [...numbers].map((letter, i) => {
-            if (i === 0) return ['(', letter]
-            if (i === 2) return [')', letter]
-            if (i === 7) return ['-', letter]
-            if (i > 10) return ['']
-            return letter
-          }).flat(1).join('')
-          const inputValue = mask
-          event.target.value = mask
-          this.setState({ [inputName]: inputValue })
+            let text = event.target.value
+            let numbers = text.replace(/\D/g, '')
+            let mask = [...numbers].map((letter, i) => {
+                if (i === 0) return ['(', letter]
+                if (i === 2) return [')', letter]
+                if (i === 7) return ['-', letter]
+                if (i > 10) return ['']
+                return letter
+            }).flat(1).join('')
+            const inputValue = mask
+            event.target.value = mask
+            this.setState({ [inputName]: inputValue })
         }
-    
+
         //handleCheck
         if (event.target.type === "checkbox") {
-          const inputValue = event.target.checked
-          if (inputValue === true) {
-            this.setState({ [inputName]: "checked" })
-          } else {
-            this.setState({ [inputName]: "" })
-          }
+            const inputValue = event.target.checked
+            if (inputValue === true) {
+                this.setState({ [inputName]: "checked" })
+            } else {
+                this.setState({ [inputName]: "" })
+            }
         } else {
-          const inputValue = event.target.value
-          this.setState({ [inputName]: inputValue })
+            const inputValue = event.target.value
+            this.setState({ [inputName]: inputValue })
         }
-    
-      }
+
+    }
 
 
 
     render() {
         return (
             <>
-                {/* {!this.state.isEditing && */}
-                {!this.isEditing &&
-                    <>
-                        <Header title="Diretório de Alunos" />
 
-                        <SearchBar type="text" id="search" placeholder="Buscar aluno" onChange={this.onSearch} />
-                        
-                        <ul>
-                            {/* {this.state.studentsList.map((item, index) => { */}
-                            {this.studentsList.map((item, index) => {
-                                return (
-                                    <ListItem key={index} {...item} onEdit={this.editAluno} onDelete={this.removerAluno} />
-                                )
-                            })}
-                        </ul>
-                    </>
-                }
+                {!this.isEditing &&
+                    <>        
+                    <Header title="Lista de Alunos Matriculados" />
+                        <SearchBar type="text" name="search" placeholder="Buscar estudante" onChange={this.onSearch} />
+                        <br />
+                        <TableContainer component={Paper}>
+                            <Table size="small" aria-label="a dense table">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Nome</TableCell>
+                                        <TableCell align="right">Data de Nascimento</TableCell>
+                                        <TableCell align="right">Turma</TableCell>
+                                        <TableCell align="right">Telefone para Emergências</TableCell>
+                                        <TableCell align="right">Contato de Emergência</TableCell>
+                                        <TableCell align="right">ID</TableCell>
+                                        <TableCell align="right">Editar</TableCell>
+                                        <TableCell align="right">Excluir</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {this.studentsList.map((item, index) => {
+                                        return (
+                                            <ListItem key={index} {...item} onEdit={this.editAluno} onDelete={this.removerAluno} />
+                                        )
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </>}
 
                 {/* {this.state.isEditing && */}
                 {this.isEditing &&
@@ -229,7 +254,7 @@ class ListPage extends React.Component {
                             onChange={this.handleChange}
                             onSubmit={this.salvarAluno}
                         />
-                        <Button onClick={this.voltar}>Descartar Alterações</Button>
+                        <Button variant="contained" color="primary" onClick={this.voltar}>Descartar Alterações</Button>
                     </>
                 }
             </>
@@ -239,48 +264,9 @@ class ListPage extends React.Component {
 
 
 
-// class MyContainer extends Component {
-//     state = {
-//       name: 'foo'
-//     }
 
-//     handleNameChange = name => {
-//       this.setState({ name })
-//     }
 
-//     render() {
-//       return (
-//         <MyChild name={this.state.name} onNameChange={this.handleNameChange} />
-//       )
-//     }
-
-//   }
-
-//   export default MyContainer
-
-//   // myChild.js
-//   import React, { Component } from 'react'
-
-//   class MyChild extends Component {
-
-//     handleInputChange = event => {
-//       this.props.onNameChange(event.target.value)
-//     }
-
-//     render() {
-//       return (
-//         <div>
-//           <input type="text" onChange={this.handleInputChange} value={this.props.name} />
-//           <div>The name is: {this.props.name}</div>
-//         </div>
-//       )
-//     }
-
-//   }
-
-//   export default MyChild
-
-export default ListPage
+export default withStyles(useStyles, { withTheme: true })(ListPage)
 
 
 

@@ -58,22 +58,7 @@ export default function HomePage() {
     setValue(newValue);
   };
 
-  const student = {
-    nome: "",
-    nascimento: "",
-    nomeresponsavel: "",
-    telresponsavel: "",
-    turma: "",
-    telemergencia: "",
-    nomeemergencia: "",
-    restricaoalim: "",
-    descricaorestricao: "",
-    autorizacaofotos: "",
-    listaautorizados: "",
-    obsadicionais: "",
-  }
 
-  const cadastro = true
 
   return (
     <div className={classes.root}>
@@ -84,7 +69,7 @@ export default function HomePage() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <FormPage student={student} cadastro={cadastro}/>
+        <FormPage />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <ListPage />
@@ -92,3 +77,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+
