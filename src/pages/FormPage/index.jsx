@@ -24,42 +24,47 @@ class FormPage extends React.Component {
       listaautorizados: "",
       obsadicionais: "",
     }
+
   }
 
   idGen = () => Math.floor((1 + Math.random()) * 0x1000000).toString(16)  // gera um id aleatorio
 
+
+  // PEGANDO OS DADOS DO MOCK API
   async componentDidMount() {
+    console.log("didmount formpage")
+
     await this.setState({
       id: this.idGen(),
     })
   }
 
+  // getList = (list) => {
+  //   let lista = localStorage.getItem(list)
+  //   if (!lista) {
+  //     lista = []
+  //   } else {
+  //     lista = JSON.parse(lista)
+  //   }
+  //   return lista
+  // }
 
-
-  getList = (list) => {
-    let lista = localStorage.getItem(list)
-    if (!lista) {
-      lista = []
-    } else {
-      lista = JSON.parse(lista)
-    }
-    return lista
-  }
-
-  adicionarAluno = (event) => {
+  adicionarAluno = async (event) => {
     event.preventDefault()
     let id = this.idGen()
     this.setState({ id: id })
-    let lista = this.getList("listaDeAlunos")
-    lista.push(this.state)
-    localStorage.setItem("listaDeAlunos", JSON.stringify(lista))
+    await fetch("/api/add", {
+      method: 'POST',
+      body: JSON.stringify(this.state)
+    })
+
   }
 
-  
+
   handleChange = (event) => {
-    
+
     let inputName = event.target.id
- 
+
     //numberMask
     if (inputName === "turma") {
       let text = event.target.value

@@ -44,11 +44,10 @@ class ListPage extends React.Component {
             currentList: [],           
         }
 
-        this.originalList = []              
+        this.originalList = []
         this.isEditing = false
         this.student = {}
     }
-
 
 
     getList = (list) => {
@@ -62,99 +61,25 @@ class ListPage extends React.Component {
         return lista
     }
 
-
-    // componentDidMount() {
-    //     console.log("didmount")
-    //     fetch("https://randomuser.me/api/?results=5")
-    //         .then((response) => response.json())
-    //         .then((data) =>
-    //             data.results.map(result => {
-    //                 return {
-    //                     id: result.cell,
-    //                     nome: `${result.name.first} ${result.name.last} `,
-    //                     nomeemergencia: result.location.city,
-    //                     telemergencia: result.phone,
-    //                     nascimento: result.dob.date,
-    //                     turma: result.location.street.number,
-    //                 }
-    //             })
-    //         )
-    //         .then(result => {
-    //             this.studentsList = result
-    //             this.forceUpdate()
-    //         })
-    //         .catch(console.error)
-    //         .finally(() => console.log("finally"))
-    // }
-
-    // MELHORANDO USANDO DESCONSTRUCAO:
-    // componentDidMount() {
-    //     console.log("didmount")
-    //     fetch("https://randomuser.me/api/?results=5")
-    //         .then((response) => response.json())
-    //         .then(({ results }) =>
-    //             results.map(({ cell, name, location, phone, dob }) => {
-    //                 return {
-    //                     id: cell,
-    //                     nome: `${name.first} ${name.last} `,
-    //                     nomeemergencia: location.city,
-    //                     telemergencia: phone,
-    //                     nascimento: dob.date,
-    //                     turma: location.street.number,
-    //                 }
-    //             })
-    //         )
-    //         .then(result => {
-    //             this.studentsList = result
-    //             this.forceUpdate()
-    //         })
-    //         .catch(console.error)
-    //         .finally(() => console.log("finally"))
-    // }
-
-    // TRANSFORMANDO PROMISES EM ASYNC/AWAIT
-    // async componentDidMount() {
-    //     console.log("didmount")
-
-    //     try {
-    //         const response = await fetch("https://randomuser.me/api/?results=5")
-    //         const json = await response.json()
-    //         const list = json.results.map(({ cell, name, location, phone, dob }) => {
-    //             return {
-    //                 id: cell,
-    //                 nome: `${name.first} ${name.last} `,
-    //                 nomeemergencia: location.city,
-    //                 telemergencia: phone,
-    //                 nascimento: dob.date,
-    //                 turma: location.street.number,
-    //             }
-    //         })
-    //         this.studentsList = list
-    //         this.forceUpdate()
-    //     } catch (error) {
-    //         console.error(error)
-    //     } finally {
-    //         console.log("finally")
-    //     }
-    // }
-
     // PEGANDO OS DADOS DO MOCK API
     async componentDidMount() {
-        console.log("didmount")
+        console.log("didmount listpage")
 
         try {
             const response = await fetch("/api/students")
             const json = await response.json()
-            const list = json.results.map(({ cell, name, location, phone, dob }) => {
-                return {
-                    id: cell,
-                    nome: `${name.first} ${name.last} `,
-                    nomeemergencia: location.city,
-                    telemergencia: phone,
-                    nascimento: dob.date.slice(0, 10),
-                    turma: location.street.number,
-                }
-            })
+            console.log("json ", json)
+            // const list = json.results.map(({ cell, name, location, phone, dob }) => {
+            //     return {
+            //         id: cell,
+            //         nome: `${name.first} ${name.last} `,
+            //         nomeemergencia: location.city,
+            //         telemergencia: phone,
+            //         nascimento: dob.date.slice(0, 10),
+            //         turma: location.street.number,
+            //     }
+            // })
+            const list = json.results
             this.originalList = list                
             this.setState({
                 currentList: list,
@@ -183,6 +108,7 @@ class ListPage extends React.Component {
         let filtro = lista.filter((el) => el.id !== id)
         this.originalList = filtro
         this.setState({ currentList: filtro })
+        localStorage.setItem("listaDeAlunos", JSON.stringify(filtro))
     }
 
 
@@ -202,15 +128,20 @@ class ListPage extends React.Component {
         // salvando a lista sem o aluno
         filtro = lista.filter((el) => el.id !== id)
         this.originalList = filtro
+        localStorage.setItem("listaDeAlunos", JSON.stringify(filtro))
     }
 
-    salvarAluno = (event) => {
+    salvarAluno = async (event) => {
         event.preventDefault()
         let lista = this.originalList
         lista.push(this.state)
         this.isEditing = false
         this.originalList = lista
         this.setState({currentList: lista})
+        await fetch("/api/add", {
+            method: 'POST',
+            body: JSON.stringify(this.state)
+          })
     }
 
     voltar = () => {
@@ -221,6 +152,7 @@ class ListPage extends React.Component {
         this.isEditing = false
         this.originalList = lista
         this.setState({currentList: lista})
+        localStorage.setItem("listaDeAlunos", JSON.stringify(lista))
     }
 
 
