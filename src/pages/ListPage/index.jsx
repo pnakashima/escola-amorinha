@@ -14,6 +14,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import { ListAltRounded } from '@material-ui/icons'
 
 
 const useStyles = makeStyles({
@@ -23,17 +24,33 @@ const useStyles = makeStyles({
 });
 
 
-function lerLista() {
-    let lista = localStorage.getItem("listaDeAlunos")
-    if (!lista) {
-        lista = []
-        localStorage.setItem("listaDeAlunos", JSON.stringify(lista))
-        return lista
-    } else {
-        lista = JSON.parse(lista)
-        return lista
-    }
-}
+// function lerLista() {
+//     let lista = localStorage.getItem("listaDeAlunos")
+//     if (!lista) {
+//         lista = []
+//         localStorage.setItem("listaDeAlunos", JSON.stringify(lista))
+//         return lista
+//     } else {
+//         lista = JSON.parse(lista)
+//         return lista
+//     }
+// }
+
+// async function lerLista() {
+//     console.log("lerLista")
+
+//     try {
+//         const response = await fetch("/api/students")
+//         const lista = await response.json()
+//         console.log(lista)
+//         return lista
+//     } catch (error) {
+//         console.error(error)
+//     } finally {
+//         console.log("finally")
+//     }
+
+// }
 
 class ListPage extends React.Component {
     constructor(props) {
@@ -63,10 +80,11 @@ class ListPage extends React.Component {
         //     student: {},
         // }
 
-        this.list = lerLista()
+        this.list = []
         this.isEditing = false
         this.student = {}
         this.studentsList = []
+
 
     }
 
@@ -79,8 +97,124 @@ class ListPage extends React.Component {
         } else {
             lista = JSON.parse(lista)
         }
+        console.log("lista: ", lista)
         return lista
     }
+
+
+    // componentDidMount() {
+    //     console.log("didmount")
+    //     fetch("https://randomuser.me/api/?results=5")
+    //         .then((response) => response.json())
+    //         // .then((data) =>
+    //         //     data.results.map(result => {
+    //         //         return {
+    //         //             id: result.cell,
+    //         //             nome: `${result.name.first} ${result.name.last} `,
+    //         //             nomeemergencia: result.location.city,
+    //         //             telemergencia: result.phone,
+    //         //             nascimento: result.dob.date,
+    //         //             turma: result.location.street.number,
+    //         //         }
+    //         //     })
+    //         // )
+
+    //         // MELHORANDO USANDO DESCONSTRUCAO:
+    //         .then(({results}) =>
+    //             results.map(({cell, name, location, phone, dob}) => {
+    //                 return {
+    //                     id: cell,
+    //                     nome: `${name.first} ${name.last} `,
+    //                     nomeemergencia: location.city,
+    //                     telemergencia: phone,
+    //                     nascimento: dob.date,
+    //                     turma: location.street.number,
+    //                 }
+    //             })
+    //         )
+    //         .then(result => {
+    //             this.studentsList = result
+    //             this.forceUpdate()
+    //         })
+    //         .catch(console.error)
+    //         .finally(() => console.log("finally"))
+    // }
+
+    // TRANSFORMANDO PROMISES EM ASYNC/AWAIT
+    // async componentDidMount() {
+    //     console.log("didmount")
+
+    //     try {
+    //         const response = await fetch("https://randomuser.me/api/?results=5")
+    //         const json = await response.json()
+    //         const list = json.results.map(({ cell, name, location, phone, dob }) => {
+    //             return {
+    //                 id: cell,
+    //                 nome: `${name.first} ${name.last} `,
+    //                 nomeemergencia: location.city,
+    //                 telemergencia: phone,
+    //                 nascimento: dob.date,
+    //                 turma: location.street.number,
+    //             }
+    //         })
+    //         this.studentsList = list
+    //         this.forceUpdate()
+    //     } catch (error) {
+    //         console.error(error)
+    //     } finally {
+    //         console.log("finally")
+    //     }
+    // }
+
+    // PEGANDO OS DADOS DO MOCK API
+    async componentDidMount() {
+        console.log("didmount")
+
+        try {
+            const response = await fetch("/api/students")
+            const json = await response.json()
+            const list = json.results.map(({ cell, name, location, phone, dob }) => {
+                return {
+                    id: cell,
+                    nome: `${name.first} ${name.last} `,
+                    nomeemergencia: location.city,
+                    telemergencia: phone,
+                    nascimento: dob.date.slice(0,10),
+                    turma: location.street.number,
+                }
+            })
+            this.studentsList = list
+            this.list = list
+            this.forceUpdate()
+        } catch (error) {
+            console.error(error)
+        } finally {
+            console.log("finally")
+        }
+    }
+
+
+
+
+    // async getList() {
+    //     console.log("lerLista")
+
+    //     try {
+    //         const response = await fetch("/api/students")
+    //         let lista = await response.json()
+    //         lista = lista.results
+    //         console.log("lista: ", lista)
+    //         console.log(lista[0])
+    //         return lista
+    //     } catch (error) {
+    //         console.log("deu ruim")
+    //         console.error(error)
+    //     } finally {
+    //         console.log("finally")
+    //     }
+
+    // }
+
 
     onSearch = (event) => {
         //console.log(event)
@@ -94,22 +228,24 @@ class ListPage extends React.Component {
         this.forceUpdate()
     }
 
-    async componentWillMount() {
-        // await this.setState({
-        //     studentsList: this.list,
-        // })
-        this.studentsList = this.getList("listaDeAlunos")
-    }
+    // async componentWillMount() {
+    //     console.log("willmount")
+    //     // await this.setState({
+    //     //     studentsList: this.list,
+    //     // })
+
+    //     this.studentsList = this.getList("listaDeAlunos")
+    //     // console.log("willmount", this.studentsList)
+    //     // this.studentsList.map((e) => console.log(e.id))
+    // }
 
     removerAluno = (event) => {
-        //console.log(event)
-        //console.log(event.target)
-        let lista = this.getList("listaDeAlunos")
+        //let lista = this.getList("listaDeAlunos")
+        let lista = this.studentsList
         let id = (event.target.parentNode.id || event.target.id)
-        //console.log("remover id: ", id)
         let filtro = lista.filter((el) => el.id !== id)
-        localStorage.setItem("listaDeAlunos", JSON.stringify(filtro))
-        this.setState({ studentsList: filtro })
+        //localStorage.setItem("listaDeAlunos", JSON.stringify(filtro))
+        //this.setState({ studentsList: filtro })
         this.studentsList = filtro
         //console.log(this.studentsList)
         this.forceUpdate()
@@ -122,7 +258,8 @@ class ListPage extends React.Component {
     editAluno = (event) => {
         //this.setState({ isEditing: true })
         this.isEditing = true
-        let lista = this.getList("listaDeAlunos")
+        //let lista = this.getList("listaDeAlunos")
+        let lista = this.studentsList
         let id = (event.target.parentNode.id || event.target.id)
         let filtro = lista.filter((el) => el.id === id)
         localStorage.setItem("editarAluno", JSON.stringify(filtro))
@@ -132,7 +269,7 @@ class ListPage extends React.Component {
 
         //apagando o aluno do local storage
         filtro = lista.filter((el) => el.id !== id)
-        localStorage.setItem("listaDeAlunos", JSON.stringify(filtro))
+        //localStorage.setItem("listaDeAlunos", JSON.stringify(filtro))
         //this.setState({ studentsList: filtro })
         this.studentsList = filtro
 
@@ -214,8 +351,8 @@ class ListPage extends React.Component {
             <>
 
                 {!this.isEditing &&
-                    <>        
-                    <Header title="Lista de Alunos Matriculados" />
+                    <>
+                        <Header title="Lista de Alunos Matriculados" />
                         <SearchBar type="text" name="search" placeholder="Buscar estudante" onChange={this.onSearch} />
                         <br />
                         <TableContainer component={Paper}>

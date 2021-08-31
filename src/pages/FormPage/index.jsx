@@ -34,6 +34,8 @@ class FormPage extends React.Component {
     })
   }
 
+
+
   getList = (list) => {
     let lista = localStorage.getItem(list)
     if (!lista) {
