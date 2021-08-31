@@ -30,6 +30,7 @@ class Form extends React.Component {
                     <Box display="flex" gridGap={20} width="50%">
                         <TextField
                             fullWidth
+                            required
                             margin="normal"
                             id="nome"
                             //type="text"
@@ -142,7 +143,15 @@ class Form extends React.Component {
                             onChange={onChange}
                             placeholder="Digite o nome e o parentesco das pessoas autorizadas"
                         />
-                        <br />
+                        {/* <label>Lista de autorizados a buscar a criança</label>
+                        <select>
+                            <option value="mae">Mãe</option>
+                            <option value="pai">Pai</option>
+                            <option value="tio">Tio</option>
+                            <option value="avo">Avó</option>
+                            <option value="padrinho">Padrinho</option>
+                        </select>
+                        <br /> */}
                     </Box>
                     <Box display="flex" gridGap={20} width="50%">
                         <TextField

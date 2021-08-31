@@ -14,7 +14,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { ListAltRounded } from '@material-ui/icons'
 
 
 const useStyles = makeStyles({
@@ -23,34 +22,6 @@ const useStyles = makeStyles({
     },
 });
 
-
-// function lerLista() {
-//     let lista = localStorage.getItem("listaDeAlunos")
-//     if (!lista) {
-//         lista = []
-//         localStorage.setItem("listaDeAlunos", JSON.stringify(lista))
-//         return lista
-//     } else {
-//         lista = JSON.parse(lista)
-//         return lista
-//     }
-// }
-
-// async function lerLista() {
-//     console.log("lerLista")
-
-//     try {
-//         const response = await fetch("/api/students")
-//         const lista = await response.json()
-//         console.log(lista)
-//         return lista
-//     } catch (error) {
-//         console.error(error)
-//     } finally {
-//         console.log("finally")
-//     }
-
-// }
 
 class ListPage extends React.Component {
     constructor(props) {
@@ -70,22 +41,12 @@ class ListPage extends React.Component {
             autorizacaofotos: "",
             listaautorizados: "",
             obsadicionais: "",
+            currentList: [],           
         }
 
-        // PROBLEMA: NAO ESTA EDITANDO, ACHEI Q O PROBLEMA ERA O STATE, POR ISSO DEIXEI O STATE IGUAL O FORM E ENCHI O CODIGO DE FORCE UPDATE
-        // TENTAR ARRUMAR ISSO
-        // this.state = {
-        //     studentsList: [],
-        //     isEditing: false,
-        //     student: {},
-        // }
-
-        this.list = []
+        this.originalList = []              
         this.isEditing = false
         this.student = {}
-        this.studentsList = []
-
-
     }
 
 
@@ -106,22 +67,33 @@ class ListPage extends React.Component {
     //     console.log("didmount")
     //     fetch("https://randomuser.me/api/?results=5")
     //         .then((response) => response.json())
-    //         // .then((data) =>
-    //         //     data.results.map(result => {
-    //         //         return {
-    //         //             id: result.cell,
-    //         //             nome: `${result.name.first} ${result.name.last} `,
-    //         //             nomeemergencia: result.location.city,
-    //         //             telemergencia: result.phone,
-    //         //             nascimento: result.dob.date,
-    //         //             turma: result.location.street.number,
-    //         //         }
-    //         //     })
-    //         // )
+    //         .then((data) =>
+    //             data.results.map(result => {
+    //                 return {
+    //                     id: result.cell,
+    //                     nome: `${result.name.first} ${result.name.last} `,
+    //                     nomeemergencia: result.location.city,
+    //                     telemergencia: result.phone,
+    //                     nascimento: result.dob.date,
+    //                     turma: result.location.street.number,
+    //                 }
+    //             })
+    //         )
+    //         .then(result => {
+    //             this.studentsList = result
+    //             this.forceUpdate()
+    //         })
+    //         .catch(console.error)
+    //         .finally(() => console.log("finally"))
+    // }
 
-    //         // MELHORANDO USANDO DESCONSTRUCAO:
-    //         .then(({results}) =>
-    //             results.map(({cell, name, location, phone, dob}) => {
+    // MELHORANDO USANDO DESCONSTRUCAO:
+    // componentDidMount() {
+    //     console.log("didmount")
+    //     fetch("https://randomuser.me/api/?results=5")
+    //         .then((response) => response.json())
+    //         .then(({ results }) =>
+    //             results.map(({ cell, name, location, phone, dob }) => {
     //                 return {
     //                     id: cell,
     //                     nome: `${name.first} ${name.last} `,
@@ -179,13 +151,14 @@ class ListPage extends React.Component {
                     nome: `${name.first} ${name.last} `,
                     nomeemergencia: location.city,
                     telemergencia: phone,
-                    nascimento: dob.date.slice(0,10),
+                    nascimento: dob.date.slice(0, 10),
                     turma: location.street.number,
                 }
             })
-            this.studentsList = list
-            this.list = list
-            this.forceUpdate()
+            this.originalList = list                
+            this.setState({
+                currentList: list,
+            })
         } catch (error) {
             console.error(error)
         } finally {
@@ -194,109 +167,60 @@ class ListPage extends React.Component {
     }
 
 
-
-
-    // async getList() {
-    //     console.log("lerLista")
-
-    //     try {
-    //         const response = await fetch("/api/students")
-    //         let lista = await response.json()
-    //         lista = lista.results
-    //         console.log("lista: ", lista)
-    //         console.log(lista[0])
-    //         return lista
-    //     } catch (error) {
-    //         console.log("deu ruim")
-    //         console.error(error)
-    //     } finally {
-    //         console.log("finally")
-    //     }
-
-    // }
-
-
     onSearch = (event) => {
-        //console.log(event)
         const { value } = event.target
-        // this.setState({
-        //     studentsList: this.list.filter(student => {
-        //         return student.nome.toLowerCase().includes(value.toLowerCase())
-        //     })
-        // })
-        this.studentsList = this.list.filter(student => student.nome.toLowerCase().includes(value.toLowerCase()))
-        this.forceUpdate()
+        this.setState({
+            currentList: this.originalList.filter(student => {
+                return student.nome.toLowerCase().includes(value.toLowerCase())
+            })
+        })
     }
 
-    // async componentWillMount() {
-    //     console.log("willmount")
-    //     // await this.setState({
-    //     //     studentsList: this.list,
-    //     // })
-
-    //     this.studentsList = this.getList("listaDeAlunos")
-    //     // console.log("willmount", this.studentsList)
-    //     // this.studentsList.map((e) => console.log(e.id))
-    // }
 
     removerAluno = (event) => {
-        //let lista = this.getList("listaDeAlunos")
-        let lista = this.studentsList
+        let lista = this.originalList
         let id = (event.target.parentNode.id || event.target.id)
         let filtro = lista.filter((el) => el.id !== id)
-        //localStorage.setItem("listaDeAlunos", JSON.stringify(filtro))
-        //this.setState({ studentsList: filtro })
-        this.studentsList = filtro
-        //console.log(this.studentsList)
-        this.forceUpdate()
+        this.originalList = filtro
+        this.setState({ currentList: filtro })
     }
 
-    //EDIÇÃO DE ALUNO: pega o aluno da lista e guarda no state.student, e apaga o aluno da lista do local storage
-    //                 se salvar, coloca um novo aluno com as informacoes atualizadas na lista do local storage
-    //                 se voltar, coloca o state.student na lista do local storage
 
+    // Para editar: pego o aluno, removo da lista e armazeno no localStorage.
+    // Caso o usuário salve as alterações, coloco o aluno novo na lista.
+    // CAso o usuário descarte as alterações, pego no localStorage e coloco na lista.
     editAluno = (event) => {
-        //this.setState({ isEditing: true })
         this.isEditing = true
-        //let lista = this.getList("listaDeAlunos")
-        let lista = this.studentsList
+        let lista = this.originalList
         let id = (event.target.parentNode.id || event.target.id)
+        
+        // filtrando o aluno e armazenando no localStorage e no state
         let filtro = lista.filter((el) => el.id === id)
         localStorage.setItem("editarAluno", JSON.stringify(filtro))
-        //this.setState({ student: filtro[0] })
-        //this.student = filtro[0]
         this.setState({ ...filtro[0] })
 
-        //apagando o aluno do local storage
+        // salvando a lista sem o aluno
         filtro = lista.filter((el) => el.id !== id)
-        //localStorage.setItem("listaDeAlunos", JSON.stringify(filtro))
-        //this.setState({ studentsList: filtro })
-        this.studentsList = filtro
-
-        this.forceUpdate()
+        this.originalList = filtro
     }
 
     salvarAluno = (event) => {
         event.preventDefault()
-        let lista = this.getList("listaDeAlunos")
-        //console.log("salvar aluno state: ", this.state)
+        let lista = this.originalList
         lista.push(this.state)
-        localStorage.setItem("listaDeAlunos", JSON.stringify(lista))
-        //this.setState({ isEditing: false })
         this.isEditing = false
-        this.studentsList = lista
-        this.forceUpdate()
+        this.originalList = lista
+        this.setState({currentList: lista})
     }
 
     voltar = () => {
-        let lista = this.getList("listaDeAlunos")
-        //lista.push(this.state.student)
-        lista.push(this.state)
-        localStorage.setItem("listaDeAlunos", JSON.stringify(lista))
-        this.studentsList = lista
-        //this.setState({ isEditing: false })
+        let lista = this.originalList
+        let aluno = localStorage.getItem("editarAluno")
+        aluno = JSON.parse(aluno)
+        lista.push(aluno[0])
         this.isEditing = false
-        this.forceUpdate()
+        this.originalList = lista
+        this.setState({currentList: lista})
     }
 
 
@@ -370,7 +294,7 @@ class ListPage extends React.Component {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {this.studentsList.map((item, index) => {
+                                    {this.state.currentList.map((item, index) => {
                                         return (
                                             <ListItem key={index} {...item} onEdit={this.editAluno} onDelete={this.removerAluno} />
                                         )
