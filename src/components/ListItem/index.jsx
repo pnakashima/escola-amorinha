@@ -29,8 +29,8 @@ class ListItem extends React.Component {
           <TableCell align="right">{telemergencia}</TableCell>
           <TableCell align="right">{nomeemergencia}</TableCell>
           <TableCell align="right">{id}</TableCell>
-          <TableCell align="right"><EditIcon id={id} onClick={onEdit} /></TableCell>
-          <TableCell align="right"><DeleteIcon id={id} onClick={onDelete} /></TableCell>
+          <TableCell align="right"><EditIcon id={id} localName={id} onClick={onEdit} /></TableCell>
+          <TableCell align="right"><DeleteIcon id={id} localName={id} onClick={onDelete} /></TableCell>
         </TableRow>
       </>
     )

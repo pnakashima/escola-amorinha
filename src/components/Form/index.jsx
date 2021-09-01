@@ -1,32 +1,104 @@
 import React from 'react'
 import TextField from '@material-ui/core/TextField'
-import { withStyles } from "@material-ui/core/styles";
 import { Button } from '@material-ui/core'
-import Checkbox from '@material-ui/core/Checkbox';
 import InputCheckbox from '../InputCheckbox';
 import Box from '@material-ui/core/Box'
-
-// const useStyles = (theme) => ({
-//     root: {
-//         '& > *': {
-//             margin: theme.spacing(1, 4),
-//             width: '60ch',
-//             color: "red",
-//         },
-//     },
-// });
 
 
 
 class Form extends React.Component {
 
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            id: "",
+            nome: "",
+            nascimento: "",
+            nomeresponsavel: "",
+            telresponsavel: "",
+            turma: "",
+            telemergencia: "",
+            nomeemergencia: "",
+            restricaoalim: "",
+            descricaorestricao: "",
+            autorizacaofotos: "",
+            listaautorizados: "",
+            obsadicionais: "",
+        }
+
+    }
+
+    componentDidMount = () => {
+        const { student } = this.props
+        this.setState({ ...student })
+    }
+
+    onSubmit = (event, student) => {
+        const { onClick } = this.props
+        event.preventDefault()
+
+        student = this.state
+        console.log("check validity: ", event.target.checkValidity())
+        onClick(student)
+    }
+
+    onInvalid = (event) => {
+        event.target.setCustomValidity("Por favor digite um nome")
+    }
+
+    handleChange = (event) => {
+        console.log(event)
+
+        const inputName = event.target.id
+
+        //numberMask
+        if (inputName === "turma") {
+            let text = event.target.value
+            let numbers = text.replace(/\D/g, '')
+            const inputValue = numbers
+            event.target.value = numbers
+            this.setState({ [inputName]: inputValue })
+        }
+
+        //phoneMask
+        if ((inputName === "telemergencia") || (inputName === "telresponsavel")) {
+            let text = event.target.value
+            let numbers = text.replace(/\D/g, '')
+            let mask = [...numbers].map((letter, i) => {
+                if (i === 0) return ['(', letter]
+                if (i === 2) return [')', letter]
+                if (i === 7) return ['-', letter]
+                if (i > 10) return ['']
+                return letter
+            }).flat(1).join('')
+            const inputValue = mask
+            event.target.value = mask
+            this.setState({ [inputName]: inputValue })
+        }
+
+        //handleCheck
+        if (event.target.type === "checkbox") {
+            const inputValue = event.target.checked
+            if (inputValue === true) {
+                this.setState({ [inputName]: "checked" })
+            } else {
+                this.setState({ [inputName]: "" })
+            }
+        } else {
+            const inputValue = event.target.value
+            this.setState({ [inputName]: inputValue })
+        }
+
+    }
+
     render() {
 
-        const { classes, value, student, onChange, onSubmit } = this.props
+        const { buttonText } = this.props
 
         return (
             <>
-                <form>
+                <form onSubmit={this.onSubmit}>
                     <Box display="flex" gridGap={20} width="50%">
                         <TextField
                             fullWidth
@@ -35,18 +107,20 @@ class Form extends React.Component {
                             id="nome"
                             //type="text"
                             label="Nome do Aluno"
-                            value={student.nome}
-                            onChange={onChange}
+                            value={this.state.nome}
+                            onChange={this.handleChange}
+                            onInvalid={this.onInvalid}
                             placeholder="Digite o nome do aluno"
                         />
                         <TextField
                             fullWidth
+                            required
                             margin="normal"
                             id="nascimento"
                             type="date"
                             label="Data de nascimento: "
-                            value={student.nascimento}
-                            onChange={onChange}
+                            value={this.state.nascimento}
+                            onChange={this.handleChange}
                             InputLabelProps={{ shrink: true, }}
                         />
                         <br />
@@ -58,8 +132,8 @@ class Form extends React.Component {
                             id="nomeresponsavel"
                             //type="text"
                             label="Nome do responsável: "
-                            value={student.nomeresponsavel}
-                            onChange={onChange}
+                            value={this.state.nomeresponsavel}
+                            onChange={this.handleChange}
                             placeholder="Digite o nome do responsável"
                         />
                         <TextField
@@ -68,8 +142,8 @@ class Form extends React.Component {
                             id="telresponsavel"
                             type="text"
                             label="Telefone do responsável: "
-                            value={student.telresponsavel}
-                            onChange={onChange}
+                            value={this.state.telresponsavel}
+                            onChange={this.handleChange}
                             placeholder="(xx)xxxxx-xxxx"
                         />
                         <br />
@@ -77,22 +151,24 @@ class Form extends React.Component {
                     <Box display="flex" gridGap={20} width="50%">
                         <TextField
                             fullWidth
+                            required
                             margin="normal"
                             id="nomeemergencia"
                             type="text"
                             label="Nome do contato de emergência: "
-                            value={student.nomeemergencia}
-                            onChange={onChange}
+                            value={this.state.nomeemergencia}
+                            onChange={this.handleChange}
                             placeholder="Digite o nome do contato de emergência"
                         />
                         <TextField
                             fullWidth
+                            required
                             margin="normal"
                             id="telemergencia"
                             type="text"
                             label="Telefone de emergência: "
-                            value={student.telemergencia}
-                            onChange={onChange}
+                            value={this.state.telemergencia}
+                            onChange={this.handleChange}
                             placeholder="(xx)xxxxx-xxxx"
                         />
                         <br />
@@ -103,22 +179,22 @@ class Form extends React.Component {
                             id="restricaoalim"
                             type="checkbox"
                             label="Possui restrição alimentar?"
-                            onChange={onChange}
-                            checked={student.restricaoalim}
+                            onChange={this.handleChange}
+                            checked={this.state.restricaoalim}
                         />
                         <br />
                     </Box>
                     <Box display="flex" gridGap={20} width="50%">
-                        {student.restricaoalim &&
+                        {this.state.restricaoalim &&
                             <TextField
                                 fullWidth
                                 margin="normal"
                                 id="descricaorestricao"
                                 type="text"
                                 label="Descrição das restrições alimentares"
-                                value={student.descricaorestricao}
+                                value={this.state.descricaorestricao}
                                 placeholder="Descreva as restrições alimentares"
-                                onChange={onChange}
+                                onChange={this.handleChange}
                             />}
                         <br />
                     </Box>
@@ -128,8 +204,8 @@ class Form extends React.Component {
                             id="autorizacaofotos"
                             type="checkbox"
                             label="Autorização de fotos e vídeos da criança"
-                            onChange={onChange}
-                            checked={student.autorizacaofotos}
+                            onChange={this.handleChange}
+                            checked={this.state.autorizacaofotos}
                         />
                         <br />
                     </Box>
@@ -139,8 +215,8 @@ class Form extends React.Component {
                             margin="normal"
                             id="listaautorizados"
                             label="Lista de autorizados a buscar a criança "
-                            value={student.listaautorizados}
-                            onChange={onChange}
+                            value={this.state.listaautorizados}
+                            onChange={this.handleChange}
                             placeholder="Digite o nome e o parentesco das pessoas autorizadas"
                         />
                         {/* <label>Lista de autorizados a buscar a criança</label>
@@ -156,12 +232,13 @@ class Form extends React.Component {
                     <Box display="flex" gridGap={20} width="50%">
                         <TextField
                             fullWidth
+                            required
                             margin="normal"
                             id="turma"
                             type="text"
                             label="Turma: "
-                            value={student.turma}
-                            onChange={onChange}
+                            value={this.state.turma}
+                            onChange={this.handleChange}
                             placeholder="Número da turma"
                         />
                         <br />
@@ -172,27 +249,24 @@ class Form extends React.Component {
                             margin="normal"
                             id="obsadicionais"
                             label="Observações adicionais "
-                            value={student.obsadicionais}
-                            onChange={onChange}
+                            value={this.state.obsadicionais}
+                            onChange={this.handleChange}
                             placeholder="Escreva aqui qualquer observação adicional"
                         />
                         <br />
                     </Box>
-
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        id="submit"
+                    >{buttonText}</Button>
                 </form>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    id="submit"
-                    value={value}
-                    onClick={onSubmit}
-                >Salvar</Button>
 
             </>
         );
     }
 }
 
-{/* </Box>export default withStyles(useStyles, { withTheme: true })(Form) */ }
 export default Form
 
