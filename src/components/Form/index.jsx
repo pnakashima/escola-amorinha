@@ -25,6 +25,7 @@ class Form extends React.Component {
             autorizacaofotos: "",
             listaautorizados: "",
             obsadicionais: "",
+            errorMessage: "",
         }
 
     }
@@ -34,13 +35,30 @@ class Form extends React.Component {
         this.setState({ ...student })
     }
 
+    checkName = (name) => {
+        const letters = /^[A-Za-z]+$/
+        return name.match(letters) ? true : false;
+    }
+
+
+
     onSubmit = (event, student) => {
         const { onClick } = this.props
         event.preventDefault()
 
         student = this.state
+
+        const validName = this.checkName(student.nome)
+
+        if (validName) {
+            this.setState({ errorMessage: "" })
+            onClick(student)
+        } else {
+            this.setState({ errorMessage: "Digite apenas letras" })
+        }
+
         console.log("check validity: ", event.target.checkValidity())
-        onClick(student)
+
     }
 
     onInvalid = (event) => {
@@ -48,7 +66,6 @@ class Form extends React.Component {
     }
 
     handleChange = (event) => {
-        console.log(event)
 
         const inputName = event.target.id
 
@@ -111,6 +128,8 @@ class Form extends React.Component {
                             onChange={this.handleChange}
                             onInvalid={this.onInvalid}
                             placeholder="Digite o nome do aluno"
+                            helperText="Digite apenas letras"
+                            error={!!this.state.errorMessage}
                         />
                         <TextField
                             fullWidth
