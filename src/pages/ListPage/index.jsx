@@ -135,8 +135,8 @@ class ListPage extends React.Component {
 
                 {!this.isEditing &&
                     <>
-                        <Header title="Lista de Alunos Matriculados" />
-                        <SearchBar type="text" name="search" placeholder="Buscar estudante" onChange={this.onSearch} />
+                        <Header title="Lista de Alunos Matriculados" addPath="/register"/>
+                        <SearchBar type="text" name="search" placeholder="Buscar estudante" onChange={this.onSearch}/>
                         <br />
                         <TableContainer component={Paper}>
                             <Table size="small" aria-label="a dense table">

@@ -22,7 +22,7 @@ class FormPage extends React.Component {
   render() {
     return (
       <>
-        <Header title="Formulário de Cadastro de Aluno" />
+        <Header title="Formulário de Cadastro de Aluno" backPath="/directory"/>
         <Form
           buttonText="Cadastrar"
           student={{}}
