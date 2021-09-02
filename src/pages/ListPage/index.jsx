@@ -12,6 +12,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import EditPage from '../EditPage';
+import { Link } from 'react-router-dom';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 
 const useStyles = makeStyles({
@@ -119,7 +122,7 @@ class ListPage extends React.Component {
 
     voltar = () => {
         let lista = this.studentsList
-        let aluno = this.student 
+        let aluno = this.student
         lista.push(aluno)
         this.isEditing = false
         this.studentsList = lista
@@ -134,7 +137,7 @@ class ListPage extends React.Component {
 
                 {!this.isEditing &&
                     <>
-                        <Header title="Lista de Alunos Matriculados" addPath="/register"/>
+                        <Header title="Lista de Alunos Matriculados" addPath="/register" />
                         <SearchBar type="text" name="search" placeholder="Buscar estudante" onChange={this.onSearch} />
                         <br />
                         <TableContainer component={Paper}>
@@ -152,19 +155,40 @@ class ListPage extends React.Component {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {this.state.stateList.map((item, index) => {
+                                    {/* {this.state.stateList.map((item, index) => {
                                         return (
                                             <ListItem key={index} {...item} onEdit={this.editAluno} onDelete={this.removerAluno} />
                                         )
+                                    })} */}
+                                    {this.state.stateList.map((item, index) => {
+                                        return (
+                                            <TableRow key={index} id={item.id}>
+                                                <TableCell component="th" scope="row">{item.nome}</TableCell>
+                                                <TableCell align="right">{item.nascimento}</TableCell>
+                                                <TableCell align="right">{item.turma}</TableCell>
+                                                <TableCell align="right">{item.telemergencia}</TableCell>
+                                                <TableCell align="right">{item.nomeemergencia}</TableCell>
+                                                <TableCell align="right">{item.id}</TableCell>
+                                                <TableCell align="right">
+                                                    <Link
+                                                        key={index}
+                                                        to={{ pathname: "/edit", state: { ...item } }}
+                                                    >
+                                                        <EditIcon id={item.id} localName={item.id} onClick={this.editAluno} />
+                                                    </Link>
+                                                </TableCell>
+                                                <TableCell align="right"><DeleteIcon id={item.id} localName={item.id} onClick={this.removerAluno} /></TableCell>
+                                            </TableRow>)
                                     })}
                                 </TableBody>
                             </Table>
                         </TableContainer>
                     </>}
 
-                {this.isEditing &&
+                {
+                    this.isEditing &&
                     <>
-                        <EditPage student={this.student}  />
+                        <EditPage student={this.student} />
                     </>
                 }
             </>

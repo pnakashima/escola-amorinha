@@ -113,7 +113,7 @@ class Form extends React.Component {
 
         return (
             <>
-                <form onSubmit={this.onSubmit} style={{margin: 20}}>
+                <form onSubmit={this.onSubmit}>
                     <Box display="flex" gridGap={20} width="50%">
                         <TextField
                             fullWidth
