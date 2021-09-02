@@ -40,8 +40,6 @@ class Form extends React.Component {
         return name.match(letters) ? true : false;
     }
 
-
-
     onSubmit = (event, student) => {
         const { onClick } = this.props
         event.preventDefault()
@@ -52,7 +50,7 @@ class Form extends React.Component {
 
         if (validName) {
             this.setState({ errorMessage: "" })
-            onClick(student)
+            onClick(student)  // passando o student pra página pai
         } else {
             this.setState({ errorMessage: "Digite apenas letras" })
         }
@@ -115,7 +113,7 @@ class Form extends React.Component {
 
         return (
             <>
-                <form onSubmit={this.onSubmit}>
+                <form onSubmit={this.onSubmit} style={{margin: 20}}>
                     <Box display="flex" gridGap={20} width="50%">
                         <TextField
                             fullWidth

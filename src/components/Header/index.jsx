@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import { Link } from 'react-router-dom';
@@ -41,13 +40,5 @@ class Header extends React.Component {
         );
     }
 }
-
-// class Header extends React.Component {
-//     render () {
-//         return (
-//             <header><h1>{this.props.title}</h1></header>
-//         )
-//     }
-// }
 
 export default Header

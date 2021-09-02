@@ -2,9 +2,6 @@ import React from 'react'
 import ListItem from '../../components/ListItem'
 import Header from '../../components/Header'
 import SearchBar from '../../components/SearchBar'
-import Form from '../../components/Form'
-//import Button from '../../components/Button'
-import { Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from "@material-ui/core/styles";
 import Table from '@material-ui/core/Table';
@@ -14,6 +11,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import EditPage from '../EditPage';
 
 
 const useStyles = makeStyles({
@@ -98,6 +96,7 @@ class ListPage extends React.Component {
         // filtrando o aluno e armazenando no localStorage e no student
         let filtro = lista.filter((el) => el.id === id)
         this.student = filtro[0]
+        localStorage.setItem("alunoSelecionado", JSON.stringify(filtro))
 
         // salvando a lista sem o aluno
         filtro = lista.filter((el) => el.id !== id)
@@ -136,7 +135,7 @@ class ListPage extends React.Component {
                 {!this.isEditing &&
                     <>
                         <Header title="Lista de Alunos Matriculados" addPath="/register"/>
-                        <SearchBar type="text" name="search" placeholder="Buscar estudante" onChange={this.onSearch}/>
+                        <SearchBar type="text" name="search" placeholder="Buscar estudante" onChange={this.onSearch} />
                         <br />
                         <TableContainer component={Paper}>
                             <Table size="small" aria-label="a dense table">
@@ -165,13 +164,7 @@ class ListPage extends React.Component {
 
                 {this.isEditing &&
                     <>
-                        <Header title="Edição de Informações" />
-                        <Form
-                            buttonText="Salvar Alterações"
-                            student={this.student}
-                            onClick={this.salvarAluno.bind(this)}
-                        />
-                        <Button variant="contained" color="primary" onClick={this.voltar}>Descartar Alterações</Button>
+                        <EditPage student={this.student}  />
                     </>
                 }
             </>
