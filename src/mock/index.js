@@ -28,7 +28,7 @@ createServer({
         this.get("/students/:id", (schema, request) => {
             const {id} = request.params
             let lista = this.getList("listaDeAlunos")
-            let aluno = lista.find(el => el.id == id)
+            let aluno = lista.find(el => el.id === id)
             return aluno
         })
 
