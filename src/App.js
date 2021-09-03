@@ -24,7 +24,9 @@ class App extends React.Component {
           </Route>
 
           {/* Renderizando desta maneira pra poder pegar as props */}
-          <Route path='/edit' component={EditPage} />  
+          <Route path='/edit' exact component={EditPage} />  
+
+          <Route path='/edit/:id' component={EditPage} />  
 
           <Route>
             404 Not Found

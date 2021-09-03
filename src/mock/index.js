@@ -5,6 +5,7 @@ console.log("MOCK")
 
 createServer({
     routes() {
+        this.namespace = "api"
 
         this.getList = (list) => {
             let lista = localStorage.getItem(list)
@@ -16,7 +17,6 @@ createServer({
             return lista
         }
 
-        this.namespace = "api"
 
         this.post("/add", (schema, request) => {
             let aluno = JSON.parse(request.requestBody)
@@ -25,6 +25,12 @@ createServer({
             localStorage.setItem("listaDeAlunos", JSON.stringify(lista))
         })
 
+        this.get("/students/:id", (schema, request) => {
+            const {id} = request.params
+            let lista = this.getList("listaDeAlunos")
+            let aluno = lista.find(el => el.id == id)
+            return aluno
+        })
 
         this.get("/students", () => {
 
