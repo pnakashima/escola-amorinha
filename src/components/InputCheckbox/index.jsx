@@ -9,22 +9,19 @@ import Checkbox from '@material-ui/core/Checkbox';
 //     };
 
 
-class InputCheckbox extends React.Component {
-    render() {
-        const {id, label, onChange, checked} = this.props
-        return (
-            <div>
-                <label htmlFor={id}>
-                    <Checkbox
-                        id={id}
-                        checked={checked}
-                        onChange={onChange}
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                    />
-                    {label}</label>
-            </div>
-        )
-    }
+const InputCheckbox = ({ id, label, onChange, checked }) => {
+    return (
+        <div>
+            <label htmlFor={id}>
+                <Checkbox
+                    id={id}
+                    checked={checked}
+                    onChange={onChange}
+                    inputProps={{ 'aria-label': 'primary checkbox' }}
+                />
+                {label}</label>
+        </div>
+    )
 }
 
 export default InputCheckbox
