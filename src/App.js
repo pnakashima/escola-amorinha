@@ -5,18 +5,18 @@ import FormPage from './pages/FormPage';
 import ListPage from './pages/ListPage';
 import EditPage from './pages/EditPage';
 import { APIProvider } from './providers/api';
+import LoginPage from './pages/LoginPage'
 
 const App = () => {
   return (
     <APIProvider>
       <BrowserRouter>
         <Switch>
-          {/* <Route path='/' exact>
-            <HomePage/>
-          </Route> */}
-          <Route path='/' exact>
+
+          <Route path='/list' exact>
             <ListPage />
           </Route>
+
           <Route path='/register'>
             <FormPage />
           </Route>
@@ -25,6 +25,8 @@ const App = () => {
           <Route path='/edit' exact component={EditPage} />
 
           <Route path='/edit/:id' component={EditPage} />
+
+          <Route path='/' exact component={LoginPage} />
 
           <Route>
             404 Not Found

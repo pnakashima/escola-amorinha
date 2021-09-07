@@ -39,7 +39,7 @@ Header.propTypes = {
 Header.defaultProps = {
     title: "Escola Amorinha",
     addPath: null,
-    backPath: '/',
+    backPath: "",
 }
 
 export default Header
