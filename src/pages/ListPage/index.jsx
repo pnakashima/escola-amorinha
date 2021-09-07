@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Header from '../../components/Header'
 import SearchBar from '../../components/SearchBar'
 import Table from '@material-ui/core/Table';
@@ -11,6 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import { Link } from 'react-router-dom';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { APIContext } from '../../providers/api';
 
 
 const ListPage = () => {
@@ -18,14 +19,16 @@ const ListPage = () => {
     const [studentsList, setStudentsList] = useState(null)    // lista de alunos completa
     const [stateList, setStateList] = useState([])          // lista de alunos usada para display na tela (search)
 
+    const { api } = useContext(APIContext)
 
     // PEGANDO OS DADOS DO MOCK API
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("/api/students")
-                const json = await response.json()
-                const list = json.results
+                // const response = await fetch("/api/students")
+                // const json = await response.json()
+                const students = await api.get("/api/students")
+                const list = students.results
                 setStudentsList(list)
             } catch (error) {
                 console.error(error)
@@ -34,7 +37,7 @@ const ListPage = () => {
             }
         }
         fetchData()
-    }, [])
+    }, [api])
 
 
     // Atualiza a stateList sempre q o studentsList muda

@@ -21,12 +21,12 @@ const Form = ({ student, buttonText, onClick, }) => {
     const [obsadicionais, setObsAdicionais] = useState(student.obsadicionais)
     const [errorMessage, setErrorMessage] = useState("")
 
-  
+
     const checkName = (name) => {
         const letters = /^[A-Za-z]+$/
         return name.match(letters) ? true : false;
     }
-    
+
     const onSubmit = (event) => {
         event.preventDefault()
         const validName = checkName(nome)
@@ -38,12 +38,11 @@ const Form = ({ student, buttonText, onClick, }) => {
         }
         console.log("check validity: ", event.target.checkValidity())
     }
-    
+
     const onInvalid = (event) => {
         event.target.setCustomValidity("Por favor digite um nome")
     }
 
-    
     const phoneMask = (event) => {
         let text = event.target.value
         let numbers = text.replace(/\D/g, '')
@@ -58,7 +57,7 @@ const Form = ({ student, buttonText, onClick, }) => {
         event.target.value = mask
         return inputValue
     }
-    
+
     const numberMask = (event) => {
         let text = event.target.value
         let numbers = text.replace(/\D/g, '')
@@ -66,19 +65,21 @@ const Form = ({ student, buttonText, onClick, }) => {
         event.target.value = numbers
         return inputValue
     }
-    
+
     const handleCheck = (event) => {
         const inputValue = event.target.checked
         let checkValue = ""
         if (inputValue === true) {
             checkValue = "checked"
-        } 
+        }
         return checkValue
     }
 
-    student = {id, nome, nascimento, nomeresponsavel, telresponsavel, turma, 
-        telemergencia, nomeemergencia, restricaoalim, descricaorestricao, 
-        autorizacaofotos, listaautorizados, obsadicionais}
+    student = {
+        id, nome, nascimento, nomeresponsavel, telresponsavel, turma,
+        telemergencia, nomeemergencia, restricaoalim, descricaorestricao,
+        autorizacaofotos, listaautorizados, obsadicionais
+    }
 
     return (
         <>
