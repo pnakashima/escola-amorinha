@@ -3,7 +3,6 @@ import Header from '../../components/Header'
 import { Box, TextField, Button } from '@material-ui/core'
 import { APIContext } from '../../providers/api';
 import { Redirect } from 'react-router-dom';
-import ListPage from '../ListPage';
 
 
 const LoginPage = () => {
@@ -73,6 +72,7 @@ const LoginPage = () => {
             {!loggedIn &&
                 <>
                     <Header title="Login" />
+                    <div>Escola Amorinha<img src='school.png' alt="" width='3'/></div>
                     <form onSubmit={onSubmit}>
                         <Box display="flex" gridGap={20} width="50%">
                             <TextField

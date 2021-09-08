@@ -8,16 +8,25 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { APIContext } from '../../providers/api';
+
+// import { Link as RouterLink } from 'react-router-dom';
+// import Link from '@material-ui/core/Link';
+// const LinkBehavior = React.forwardRef((props, ref) => (
+//     <RouterLink ref={ref} to="/getting-started/installation/" {...props} />
+// ));
+
 
 
 const ListPage = () => {
 
     const [studentsList, setStudentsList] = useState(null)    // lista de alunos completa
     const [stateList, setStateList] = useState([])          // lista de alunos usada para display na tela (search)
+
+    let history = useHistory()
 
     const { api } = useContext(APIContext)
 
@@ -47,6 +56,7 @@ const ListPage = () => {
         }
     }, [studentsList])
 
+
     const onSearch = (event) => {
         const { value } = event.target
         const list = studentsList.filter(student => student.nome.toLowerCase().includes(value.toLowerCase()))
@@ -68,11 +78,16 @@ const ListPage = () => {
         let lista = studentsList
         let id = (event.target.parentNode.id || event.target.id)
 
+        let filtro1 = lista.filter((el) => el.id === id)
+        localStorage.setItem("alunoSelecionado", JSON.stringify(filtro1))
+
         // salvando a lista sem o aluno
-        let filtro = lista.filter((el) => el.id !== id)
-        setStudentsList(filtro)
-        setStateList(filtro)
-        localStorage.setItem("listaDeAlunos", JSON.stringify(filtro))
+        let filtro2 = lista.filter((el) => el.id !== id)
+        setStudentsList(filtro2)
+        setStateList(filtro2)
+        localStorage.setItem("listaDeAlunos", JSON.stringify(filtro2))
+
+        history.push("/edit", filtro1[0])
     }
 
     return (
@@ -109,14 +124,7 @@ const ListPage = () => {
                                     <TableCell align="right">{item.telemergencia}</TableCell>
                                     <TableCell align="right">{item.nomeemergencia}</TableCell>
                                     <TableCell align="right">{item.id}</TableCell>
-                                    <TableCell align="right">
-                                        <Link
-                                            key={index}
-                                            to={{ pathname: "/edit", state: { ...item } }}
-                                        >
-                                            <EditIcon id={item.id} onClick={editAluno} />
-                                        </Link>
-                                    </TableCell>
+                                    <TableCell align="right"><EditIcon id={item.id} onClick={editAluno} /></TableCell>
                                     <TableCell align="right"><DeleteIcon id={item.id} onClick={removerAluno} /></TableCell>
                                 </TableRow>)
                         })}

@@ -13,6 +13,8 @@ const App = () => {
       <BrowserRouter>
         <Switch>
 
+          <Route path='/' exact component={LoginPage} />
+
           <Route path='/list' exact>
             <ListPage />
           </Route>
@@ -25,8 +27,6 @@ const App = () => {
           <Route path='/edit' exact component={EditPage} />
 
           <Route path='/edit/:id' component={EditPage} />
-
-          <Route path='/' exact component={LoginPage} />
 
           <Route>
             404 Not Found

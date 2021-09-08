@@ -5,24 +5,26 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import AddIcon from "@material-ui/icons/Add";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const Header = ({ addPath, title, backPath, ...props }) => {
+    let history = useHistory()
+
     return (
         <AppBar position="static">
             <Toolbar>
                 {backPath && (
-                    <Link to={backPath}>
+                    <span onClick={() => history.push(backPath)}>
                         <KeyboardArrowLeft />
-                    </Link>
+                    </span>
                 )}
                 <Typography variant="h6" style={{ flexGrow: 1 }}>
                     {title}
                 </Typography>
                 {addPath && (
-                    <Link to={addPath}>
+                    <span onClick={() => history.push(addPath)}>
                         <AddIcon />
-                    </Link>
+                    </span>
                 )}
             </Toolbar>
         </AppBar>

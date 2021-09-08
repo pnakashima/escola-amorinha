@@ -3,6 +3,7 @@ import TextField from '@material-ui/core/TextField'
 import { Button } from '@material-ui/core'
 import InputCheckbox from '../InputCheckbox';
 import Box from '@material-ui/core/Box'
+import { useHistory } from 'react-router-dom';
 
 const Form = ({ student, buttonText, onClick, }) => {
 
@@ -21,6 +22,7 @@ const Form = ({ student, buttonText, onClick, }) => {
     const [obsadicionais, setObsAdicionais] = useState(student.obsadicionais)
     const [errorMessage, setErrorMessage] = useState("")
 
+    let history = useHistory()
 
     const checkName = (name) => {
         const letters = /^[A-Za-z]+$/
@@ -37,6 +39,7 @@ const Form = ({ student, buttonText, onClick, }) => {
             setErrorMessage("Digite apenas letras")
         }
         console.log("check validity: ", event.target.checkValidity())
+        history.push("/list")
     }
 
     const onInvalid = (event) => {
@@ -247,7 +250,9 @@ const Form = ({ student, buttonText, onClick, }) => {
                     variant="contained"
                     color="primary"
                     id="submit"
-                >{buttonText}</Button>
+                >
+                    {buttonText}
+                </Button>
             </form>
         </>
     );

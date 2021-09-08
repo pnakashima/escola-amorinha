@@ -17,6 +17,11 @@ createServer({
             return lista
         }
 
+        // this.get("/selected", () => {
+        //     let student = localStorage.getItem("alunoSelecionado")
+        //     student = JSON.parse(student)
+        //     return student
+        // })
 
         this.post("/add", (schema, request) => {
             let aluno = JSON.parse(request.requestBody)
@@ -36,9 +41,26 @@ createServer({
             return {
                 results: [
                     {
+                        nome: "Paulo Nakashima",
                         login: "naka@amorinha.com",
-                        senha: "abc123"
-                    }
+                        senha: "abc123",
+                        cargo: "diretor",
+                        turmas: [],
+                    },
+                    {
+                        nome: "Paulo Hiroaqui",
+                        login: "hiroaqui@amorinha.com",
+                        senha: "abc1234",
+                        cargo: "coordenador",
+                        turmas: [1, 2, 3],
+                    },
+                    {
+                        nome: "Paulo Ruiz",
+                        login: "ruiz@amorinha.com",
+                        senha: "abc12345",
+                        cargo: "professor",
+                        turmas: [4, 5, 6],
+                    },
                 ]
 
             }

@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Header from "../../components/Header";
 import Form from "../../components/Form";
-//import { Link } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+import { Button } from "@material-ui/core";
+import { APIContext } from "../../providers/api";
 
 const EditPage = ({ location: { state, search }, match: { params }, student }) => {
 
     const [aluno, setAluno] = useState(null)
 
-    // student vem da chamada do onClick no Form
-    const salvarAluno = async (student) => {
-        await fetch("/api/add", {
-            method: 'POST',
-            body: JSON.stringify(student)
-        })
-    }
+    let history = useHistory()
+    const location = useLocation()
+
+    console.log("location", location)
+
+    const { api } = useContext(APIContext)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -21,6 +22,7 @@ const EditPage = ({ location: { state, search }, match: { params }, student }) =
                 if (state) {
                     setAluno(state)
                 } else {
+                    console.log("params id", params.id)
                     const response = await fetch(`/api/students/${params.id}`)
                     const student = await response.json()
                     setAluno(student)
@@ -32,22 +34,35 @@ const EditPage = ({ location: { state, search }, match: { params }, student }) =
         fetchData()
     })
 
+    // student vem da chamada do onClick no Form
+    const salvarAluno = async (student) => {
+        await fetch("/api/add", {
+            method: 'POST',
+            body: JSON.stringify(student)
+        })
+        history.push('/list')
+    }
+
+    const voltar = async () => {
+        const student = await api.get("api/selected")
+        console.log("voltar", student)
+        salvarAluno(student[0])
+    }
+
     if (aluno) {
         return (<>
-            <Header title="Edição de Informações" backPath={"/list"} />
+            <Header title="Edição de Informações" />
             <Form
                 buttonText="Salvar Alterações"
                 student={aluno}
                 onClick={salvarAluno}
             />
-            {/* <Link to="/" >
-                    <Button variant="contained" color="primary" onClick={this.voltar}>Descartar Alterações</Button>
-                </Link> */}
+            <Button variant="contained" color="primary" onClick={voltar}>Descartar Alterações</Button>
         </>);
     }
 
     return (<>
-        <Header title="Edição de Informações" backPath={"/"} />
+        <Header title="Edição de Informações" />
         <br />
         No content
     </>);
