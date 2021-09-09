@@ -4,6 +4,7 @@ import { Box, TextField, Button } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import logo from './school.png'
 import PropTypes from 'prop-types'
+import { UserContext } from '../../providers/user'
 
 
 const LoginPage = ({ setToken, setInfo }) => {
@@ -15,11 +16,12 @@ const LoginPage = ({ setToken, setInfo }) => {
 
     let history = useHistory()
 
+    const { setUser } = useContext(UserContext)
 
     const onSubmit = async (event) => {
         event.preventDefault()
 
-        const {status, employee} = await fetch("/api/employees", {
+        const { status, employee } = await fetch("/api/employees", {
             method: 'POST',
             body: JSON.stringify({ login, senha })
         })
@@ -32,6 +34,7 @@ const LoginPage = ({ setToken, setInfo }) => {
         if (status === "SUCCESS") {
             console.log("Login ok")
             setToken(true)
+            setUser(employee)
             history.push('/list')
 
         } else if (status === "PASSWORD") {

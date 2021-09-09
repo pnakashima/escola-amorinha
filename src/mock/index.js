@@ -69,14 +69,14 @@ createServer({
             if (isEmployee.length > 0) {
                 if (isEmployee[0].senha === senha) {
                     console.log("success")
-                    return JSON.stringify({status: "SUCCESS", employee: isEmployee[0]})
+                    return JSON.stringify({ status: "SUCCESS", employee: isEmployee[0] })
                 } else {
                     console.log("PWD")
-                    return JSON.stringify({status: "PASSWORD"})
+                    return JSON.stringify({ status: "PASSWORD", employee: {} })
                 }
             } else {
                 console.log("USR")
-                return JSON.stringify({status: "USER"})
+                return JSON.stringify({ status: "USER", employee: {} })
             }
         })
 

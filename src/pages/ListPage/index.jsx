@@ -12,6 +12,7 @@ import { useHistory } from 'react-router-dom';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { APIContext } from '../../providers/api';
+import { UserContext } from '../../providers/user';
 
 // import { Link as RouterLink } from 'react-router-dom';
 // import Link from '@material-ui/core/Link';
@@ -29,6 +30,10 @@ const ListPage = () => {
     let history = useHistory()
 
     const { api } = useContext(APIContext)
+
+    const { user } = useContext(UserContext)
+
+    console.log("teste user", user)
 
     // PEGANDO OS DADOS DO MOCK API
     useEffect(() => {

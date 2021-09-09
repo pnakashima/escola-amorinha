@@ -7,6 +7,7 @@ import EditPage from './pages/EditPage';
 import { APIProvider } from './providers/api';
 import LoginPage from './pages/LoginPage'
 import useToken from './useToken'
+import { UserProvider } from './providers/user';
 
 
 const App = () => {
@@ -24,25 +25,27 @@ const App = () => {
 
   return (
     <APIProvider>
-      <BrowserRouter>
-        <Switch>
+      <UserProvider>
+        <BrowserRouter>
+          <Switch>
 
-          <Route path='/' exact component={() => <LoginPage setToken={setToken} />} />
+            <Route path='/' exact component={() => <LoginPage setToken={setToken} />} />
 
-          {token && <Route path='/list' exact component={ListPage} />}
+            {token && <Route path='/list' exact component={ListPage} />}
 
-          {token && <Route path='/register' component={FormPage} />}
+            {token && <Route path='/register' component={FormPage} />}
 
-          {token && <Route path='/edit' exact component={EditPage} />}
+            {token && <Route path='/edit' exact component={EditPage} />}
 
-          {token && <Route path='/edit/:id' component={EditPage} />}
+            {token && <Route path='/edit/:id' component={EditPage} />}
 
-          <Route>
-            404 Not Found
-          </Route>
+            <Route>
+              404 Not Found
+            </Route>
 
-        </Switch>
-      </BrowserRouter>
+          </Switch>
+        </BrowserRouter>
+      </UserProvider>
     </APIProvider>
   )
 }
