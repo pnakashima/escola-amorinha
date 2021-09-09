@@ -17,11 +17,11 @@ createServer({
             return lista
         }
 
-        // this.get("/selected", () => {
-        //     let student = localStorage.getItem("alunoSelecionado")
-        //     student = JSON.parse(student)
-        //     return student
-        // })
+        this.get("/selected", () => {
+            let student = localStorage.getItem("alunoSelecionado")
+            student = JSON.parse(student)
+            return student
+        })
 
         this.post("/add", (schema, request) => {
             let aluno = JSON.parse(request.requestBody)
@@ -38,6 +38,8 @@ createServer({
         })
 
         this.get("/employees", () => {
+            
+            console.log("get employees")
             return {
                 results: [
                     {
@@ -60,9 +62,8 @@ createServer({
                         senha: "abc12345",
                         cargo: "professor",
                         turmas: [4, 5, 6],
-                    },
+                    }
                 ]
-
             }
         })
 

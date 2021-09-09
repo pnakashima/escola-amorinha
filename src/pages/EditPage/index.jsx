@@ -32,7 +32,7 @@ const EditPage = ({ location: { state, search }, match: { params }, student }) =
             }
         }
         fetchData()
-    })
+    }, [state, params.id])
 
     // student vem da chamada do onClick no Form
     const salvarAluno = async (student) => {

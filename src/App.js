@@ -6,31 +6,41 @@ import ListPage from './pages/ListPage';
 import EditPage from './pages/EditPage';
 import { APIProvider } from './providers/api';
 import LoginPage from './pages/LoginPage'
+import useToken from './useToken'
+
 
 const App = () => {
+
+  const { token, setToken } = useToken()
+
+  console.log("app token 1", token)
+
+
+  // if(!token) {
+  //   return <LoginPage setToken={setToken} />
+  // }
+
+  // console.log("app token 2", token)
+
   return (
     <APIProvider>
       <BrowserRouter>
         <Switch>
 
-          <Route path='/' exact component={LoginPage} />
+          <Route path='/' exact component={() => <LoginPage setToken={setToken} />} />
 
-          <Route path='/list' exact>
-            <ListPage />
-          </Route>
+          {token && <Route path='/list' exact component={ListPage} />}
 
-          <Route path='/register'>
-            <FormPage />
-          </Route>
+          {token && <Route path='/register' component={FormPage} />}
 
-          {/* Renderizando desta maneira pra poder pegar as props */}
-          <Route path='/edit' exact component={EditPage} />
+          {token && <Route path='/edit' exact component={EditPage} />}
 
-          <Route path='/edit/:id' component={EditPage} />
+          {token && <Route path='/edit/:id' component={EditPage} />}
 
           <Route>
             404 Not Found
           </Route>
+
         </Switch>
       </BrowserRouter>
     </APIProvider>
