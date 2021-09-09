@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useRef, useEffect } from 'react'
 import Header from '../../components/Header'
 import { Box, TextField, Button } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
@@ -16,7 +16,14 @@ const LoginPage = ({ setToken, setInfo }) => {
 
     let history = useHistory()
 
+    const loginRef = useRef(null)
+
     const { setUser } = useContext(UserContext)
+
+    useEffect(() => {
+        console.log("effect", loginRef)
+        loginRef.current.focus()
+    }, [])
 
     const onSubmit = async (event) => {
         event.preventDefault()
@@ -76,6 +83,7 @@ const LoginPage = ({ setToken, setInfo }) => {
                         placeholder="Login"
                         helperText={errorLogin}
                         error={!!errorLogin}
+                        ref={loginRef}
                     />
                 </Box>
                 <Box display="flex" gridGap={20} width="50%">
