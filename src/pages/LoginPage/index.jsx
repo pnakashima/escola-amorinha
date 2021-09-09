@@ -83,7 +83,7 @@ const LoginPage = ({ setToken, setInfo }) => {
                         placeholder="Login"
                         helperText={errorLogin}
                         error={!!errorLogin}
-                        ref={loginRef}
+                        inputRef={loginRef}
                     />
                 </Box>
                 <Box display="flex" gridGap={20} width="50%">
