@@ -8,7 +8,7 @@ import { APIProvider } from './providers/api';
 import LoginPage from './pages/LoginPage'
 import useToken from './useToken'
 import { UserProvider } from './providers/user';
-
+import ProfilePage from './pages/ProfilePage';
 
 const App = () => {
 
@@ -38,6 +38,9 @@ const App = () => {
             {token && <Route path='/edit' exact component={EditPage} />}
 
             {token && <Route path='/edit/:id' component={EditPage} />}
+
+            {token && <Route path='/profile' component={ProfilePage} />}
+
 
             <Route>
               404 Not Found

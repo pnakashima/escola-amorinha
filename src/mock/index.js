@@ -43,22 +43,22 @@ createServer({
                 {
                     nome: "Paulo Nakashima",
                     login: "naka@amorinha.com",
-                    senha: "abc123",
-                    cargo: "diretor",
+                    senha: "paulo123",
+                    cargo: "Diretor",
                     turmas: [],
                 },
                 {
                     nome: "Paulo Hiroaqui",
                     login: "hiroaqui@amorinha.com",
-                    senha: "abc1234",
-                    cargo: "coordenador",
+                    senha: "hiroaqui123",
+                    cargo: "Coordenador",
                     turmas: [1, 2, 3],
                 },
                 {
                     nome: "Paulo Ruiz",
                     login: "ruiz@amorinha.com",
-                    senha: "abc12345",
-                    cargo: "professor",
+                    senha: "ruiz123",
+                    cargo: "Professor",
                     turmas: [4, 5, 6],
                 }
             ]

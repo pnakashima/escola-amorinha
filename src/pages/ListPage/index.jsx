@@ -33,7 +33,6 @@ const ListPage = () => {
 
     const { user } = useContext(UserContext)
 
-    console.log("teste user", user)
 
     // PEGANDO OS DADOS DO MOCK API
     useEffect(() => {
@@ -97,7 +96,7 @@ const ListPage = () => {
 
     return (
         <>
-            <Header title="Lista de Alunos Matriculados" addPath="/register" />
+            <Header title="Lista de Alunos Matriculados" addPath="/register" profilePath="/profile" exitPath={"/"}/>
             <SearchBar type="text" name="search" placeholder="Buscar estudante" onChange={onSearch} />
             <br />
             <TableContainer component={Paper}>

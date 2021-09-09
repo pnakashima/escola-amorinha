@@ -17,7 +17,7 @@ const adicionarAluno = async (student) => {
 const FormPage = () => {
   return (
     <>
-      <Header title="Formulário de Cadastro de Aluno" backPath={"/list"} />
+      <Header title="Formulário de Cadastro de Aluno" backPath={"/list"}exitPath={"/"} />
       <Form
         buttonText="Cadastrar"
         student={{}}

@@ -83,6 +83,7 @@ const LoginPage = ({ setToken, setInfo }) => {
                         fullWidth
                         required
                         margin="normal"
+                        type="password"
                         id="senha"
                         label="Senha"
                         value={senha}

@@ -51,7 +51,7 @@ const EditPage = ({ location: { state, search }, match: { params }, student }) =
 
     if (aluno) {
         return (<>
-            <Header title="Edição de Informações" />
+            <Header title="Edição de Informações" backPath={"/list"} exitPath={"/"}/>
             <Form
                 buttonText="Salvar Alterações"
                 student={aluno}
