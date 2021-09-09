@@ -37,33 +37,46 @@ createServer({
             return aluno
         })
 
-        this.get("/employees", () => {
-            
-            console.log("get employees")
-            return {
-                results: [
-                    {
-                        nome: "Paulo Nakashima",
-                        login: "naka@amorinha.com",
-                        senha: "abc123",
-                        cargo: "diretor",
-                        turmas: [],
-                    },
-                    {
-                        nome: "Paulo Hiroaqui",
-                        login: "hiroaqui@amorinha.com",
-                        senha: "abc1234",
-                        cargo: "coordenador",
-                        turmas: [1, 2, 3],
-                    },
-                    {
-                        nome: "Paulo Ruiz",
-                        login: "ruiz@amorinha.com",
-                        senha: "abc12345",
-                        cargo: "professor",
-                        turmas: [4, 5, 6],
-                    }
-                ]
+        this.post("/employees", (schema, request) => {
+            let { login, senha } = JSON.parse(request.requestBody)
+            let employees = [
+                {
+                    nome: "Paulo Nakashima",
+                    login: "naka@amorinha.com",
+                    senha: "abc123",
+                    cargo: "diretor",
+                    turmas: [],
+                },
+                {
+                    nome: "Paulo Hiroaqui",
+                    login: "hiroaqui@amorinha.com",
+                    senha: "abc1234",
+                    cargo: "coordenador",
+                    turmas: [1, 2, 3],
+                },
+                {
+                    nome: "Paulo Ruiz",
+                    login: "ruiz@amorinha.com",
+                    senha: "abc12345",
+                    cargo: "professor",
+                    turmas: [4, 5, 6],
+                }
+            ]
+
+            const isEmployee = employees.filter((e) => e.login === login)
+            console.log("submit", isEmployee)
+
+            if (isEmployee.length > 0) {
+                if (isEmployee[0].senha === senha) {
+                    console.log("success")
+                    return JSON.stringify({status: "SUCCESS", employee: isEmployee[0]})
+                } else {
+                    console.log("PWD")
+                    return JSON.stringify({status: "PASSWORD"})
+                }
+            } else {
+                console.log("USR")
+                return JSON.stringify({status: "USER"})
             }
         })
 

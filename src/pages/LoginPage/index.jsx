@@ -1,68 +1,48 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext } from 'react'
 import Header from '../../components/Header'
 import { Box, TextField, Button } from '@material-ui/core'
-import { APIContext } from '../../providers/api'
 import { useHistory } from 'react-router-dom'
 import logo from './school.png'
 import PropTypes from 'prop-types'
 
 
-const LoginPage = ({ setToken }) => {
+const LoginPage = ({ setToken, setInfo }) => {
 
-    const [login, setLogin] = useState("")
-    const [senha, setSenha] = useState("")
-    const [employees, setEmployees] = useState([])
-    const [errorLogin, setErrorLogin] = useState("")
-    const [errorSenha, setErrorSenha] = useState("")
+    const [login, setLogin] = useState()
+    const [senha, setSenha] = useState()
+    const [errorLogin, setErrorLogin] = useState()
+    const [errorSenha, setErrorSenha] = useState()
 
     let history = useHistory()
 
-    const { api } = useContext(APIContext)
 
-    // PEGANDO OS DADOS DO MOCK API
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const employees = await api.get("/api/employees")
-                console.log("fetch", employees)
-                const list = employees.results
-                console.log("fetch", list)
-                setEmployees(list)
-            } catch (error) {
-                console.error(error)
-            } finally {
-                console.log("finally")
-            }
-        }
-        fetchData()
-    }, [api])
-
-
-
-    const onSubmit = (event) => {
+    const onSubmit = async (event) => {
         event.preventDefault()
-        setToken(false)
-        const isEmployee = employees.filter((e) => e.login === login)
-        console.log("submit", isEmployee)
-        if (isEmployee.length > 0) {
-            setErrorLogin("")
-            setErrorSenha("")
-            if (isEmployee[0].senha === senha) {
-                console.log("Login ok")
-                setToken(true)
-                history.push('/list')
-                return true
-            } else {
-                console.log("Senha incorreta")
-                setErrorSenha("Senha incorreta")
-                setToken(false)
-                return false
-            }
-        } else {
-            console.log("Usuário não encontrado")
-            setErrorLogin("Usuário não encontrado")
+
+        const {status, employee} = await fetch("/api/employees", {
+            method: 'POST',
+            body: JSON.stringify({ login, senha })
+        })
+            .then(response => response.json())
+            .then()
+
+        console.log("status ", status)
+        console.log("employee ", employee)
+
+        if (status === "SUCCESS") {
+            console.log("Login ok")
+            setToken(true)
+            history.push('/list')
+
+        } else if (status === "PASSWORD") {
+            console.log("Senha incorreta")
+            setErrorSenha("Senha incorreta")    // NAO TA APARECENDO O ERRO, na 1a vez q digita errado ele recarrega a pagina, na 2a vez n recarrega e aparece
             setToken(false)
-            return false
+
+        } else if (status === "USER") {
+            console.log("Usuário não encontrado")
+            setErrorLogin("Usuário não encontrado") // NAO TA APARECENDO O ERRO
+            setToken(false)
         }
     }
 

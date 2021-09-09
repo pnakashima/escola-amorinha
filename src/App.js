@@ -13,7 +13,7 @@ const App = () => {
 
   const { token, setToken } = useToken()
 
-  console.log("app token 1", token)
+  console.log("app token ", token)
 
 
   // if(!token) {
