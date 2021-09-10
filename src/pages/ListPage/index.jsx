@@ -31,7 +31,7 @@ const ListPage = () => {
 
     const { api } = useContext(APIContext)
 
-    const { user } = useContext(UserContext)
+
 
 
     // PEGANDO OS DADOS DO MOCK API

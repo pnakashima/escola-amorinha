@@ -4,12 +4,20 @@ import Form from "../../components/Form";
 import { useHistory, useLocation } from 'react-router-dom';
 import { Button } from "@material-ui/core";
 import { APIContext } from "../../providers/api";
+import { UserContext } from "../../providers/user";
 
 const EditPage = ({ location: { state, search }, match: { params }, student }) => {
 
     const [aluno, setAluno] = useState(null)
 
     let history = useHistory()
+
+    const { user } = useContext(UserContext)
+
+    let token
+
+    ((user.cargo === "Coordenador") || (user.cargo === "Diretor")) ? token = true : token = false
+
     const location = useLocation()
 
     console.log("location", location)
@@ -49,9 +57,9 @@ const EditPage = ({ location: { state, search }, match: { params }, student }) =
         salvarAluno(student[0])
     }
 
-    if (aluno) {
+    if (aluno && token) {
         return (<>
-            <Header title="Edição de Informações" backPath={"/list"} exitPath={"/"}/>
+            <Header title="Edição de Informações" backPath={"/list"} exitPath={"/"} />
             <Form
                 buttonText="Salvar Alterações"
                 student={aluno}
